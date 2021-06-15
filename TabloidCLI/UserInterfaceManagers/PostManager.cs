@@ -58,18 +58,46 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.Write("");
             //ListAuthors();
 
-            Console.Write("Select an Author: ");
-            ListAuthors();
+            Console.WriteLine("Select an Author: ");
+            post.Author = ChooseAuthor();
+
+            _postRepository.Insert(post);
+            //Console.WriteLine("Select a Blog: ");
+            //post.Blog = 
+            
 
         }
 
-        private void ListAuthors()
+        private Author ChooseAuthor(string prompt = null)
         {
+
             List<Author> authors = _authorRepository.GetAll();
-            foreach (Author author in authors)
+
+            for (int i = 0; i < authors.Count; i++)
             {
-                Console.WriteLine($"{1++}");
+                Author author = authors[i];
+                Console.WriteLine($" {i + 1}) {author.FullName}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return authors[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
             }
         }
+
+        // !! NEED BLOG REPOSITORY BEFORE I CAN PROCEED !!
+
+        //private Blog ChooseBlog(string prompt = null)
+        //{
+        //    List<Blog> blogs = _blog
+        //}
     }
 }
