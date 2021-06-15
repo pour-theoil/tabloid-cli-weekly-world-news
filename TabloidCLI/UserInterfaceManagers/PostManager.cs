@@ -27,6 +27,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             Console.WriteLine("Post Management Menu");
             Console.WriteLine(" 1) Add a Post");
+            Console.WriteLine(" 2) List Posts");
 
             Console.Write("> ");
             string choice = Console.ReadLine();
@@ -35,6 +36,9 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 case "1":
                     Add();
+                    return this;
+                case "2":
+                    List();
                     return this;
                 default:
                     Console.WriteLine("Invalid Selection");
@@ -119,7 +123,15 @@ namespace TabloidCLI.UserInterfaceManagers
                 Console.WriteLine("Invalid Selection");
                 return null;
             }
+        }
 
+        private void List()
+        {
+            List<Post> posts = _postRepository.GetAll();
+            foreach(Post post in posts)
+            {
+                Console.WriteLine(post);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 using TabloidCLI.Models;
 
 namespace TabloidCLI.Repositories
@@ -11,7 +12,35 @@ namespace TabloidCLI.Repositories
 
         public List<Post> GetAll()
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT p.id AS PostId, 
+                                                p.Title AS PostTitle, 
+                                                p.Url AS URL, 
+                                                p.PublishDateTime AS Date, 
+                                                a.FirstName, a.LastName, 
+                                                b.Title as BlogTitle
+                                        FROM Post p
+                                        LEFT JOIN Blog b ON b.Id = p.BlogId
+                                        LEFT JOIN Author a ON a.Id = p.AuthorId
+                                        ";
+
+                    List<Post> posts = new List<Post>();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Post post = new Post()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("PostId"))
+                            // enter remaining data here
+                        };
+                    }
+                }
+            }
         }
 
         public Post Get(int id)
