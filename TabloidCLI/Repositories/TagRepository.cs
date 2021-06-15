@@ -44,19 +44,58 @@ namespace TabloidCLI
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Inserts a new tag entry
+        /// </summary>
+        /// <param name="tag"></param>
         public void Insert(Tag tag)
         {
-            throw new NotImplementedException();
-        }
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "Insert into tag (name) values (@name)";
+                    cmd.Parameters.AddWithValue("@name", tag.Name);
 
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        /// <summary>
+        /// Updates Tag after choosing the corresponding tag from the dropdown list
+        /// </summary>
+        /// <param name="tag"></param>
         public void Update(Tag tag)
         {
-            throw new NotImplementedException();
+            using(SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using(SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "Update tag set Name = @name where id = @id";
+                    cmd.Parameters.AddWithValue("@name", tag.Name);
+                    cmd.Parameters.AddWithValue("@id", tag.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
-
+        /// <summary>
+        /// Remove tag with id parameter
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "delete from tag where id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public SearchResults<Author> SearchAuthors(string tagName)
