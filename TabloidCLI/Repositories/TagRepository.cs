@@ -42,22 +42,12 @@ namespace TabloidCLI
         public Tag Get(int id)
         {
             throw new NotImplementedException();
-            //using(SqlConnection conn = Connection)
-            //{
-            //    conn.Open()
-            //        {
-            //        using (SqlCommand cmd = conn.CreateCommand())
-            //        {
-            //            cmd.CommandText = "select * from tag where Id = @id";
-            //            cmd.Parameters.AddWithValue("@id", id);
-
-
-
-            //        }
-            //    }
-            //}
         }
 
+        /// <summary>
+        /// Inserts a new tag entry
+        /// </summary>
+        /// <param name="tag"></param>
         public void Insert(Tag tag)
         {
             using(SqlConnection conn = Connection)
@@ -72,7 +62,10 @@ namespace TabloidCLI
                 }
             }
         }
-
+        /// <summary>
+        /// Updates Tag after choosing the corresponding tag from the dropdown list
+        /// </summary>
+        /// <param name="tag"></param>
         public void Update(Tag tag)
         {
             using(SqlConnection conn = Connection)
@@ -87,7 +80,10 @@ namespace TabloidCLI
                 }
             }
         }
-
+        /// <summary>
+        /// Remove tag with id parameter
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int id)
         {
             using (SqlConnection conn = Connection)
