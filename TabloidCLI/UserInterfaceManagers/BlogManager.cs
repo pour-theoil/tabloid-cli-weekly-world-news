@@ -36,7 +36,8 @@ namespace TabloidCLI.UserInterfaceManagers
             switch (choice)
             {
                 case "1":
-                    throw new NotImplementedException();
+                    List();
+                    return this;
                 case "2":
                     throw new NotImplementedException();
                 case "3":
@@ -51,6 +52,17 @@ namespace TabloidCLI.UserInterfaceManagers
                 default:
                     Console.WriteLine("Invalid Selection");
                     return this;
+            }
+        }
+
+        // The list function.  Lists all blogs.
+        private void List()
+        {
+            List<Blog> blogs = _blogRepository.GetAll();
+            foreach (Blog blog in blogs)
+            {
+                // Returns title and url due to overridden method
+                Console.WriteLine(blog);
             }
         }
 
