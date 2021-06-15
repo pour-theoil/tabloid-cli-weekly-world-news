@@ -11,7 +11,9 @@ namespace TabloidCLI.UserInterfaceManagers
         private string _connectionString;
         public TagManager(IUserInterfaceManager parentUI, string connectionString)
         {
+            
             _parentUI = parentUI;
+            //create a field using the connnection string and tag repo
             _tagRepository = new TagRepository(connectionString);
             _connectionString = connectionString;
         }
@@ -90,7 +92,11 @@ namespace TabloidCLI.UserInterfaceManagers
 
             _tagRepository.Update(tagToEdit);
         }
-
+        /// <summary>
+        /// Lists all of the tag options to choose from
+        /// </summary>
+      
+        /// <returns></returns>
         private Tag Choose(string prompt = null)
         {
             if (prompt == null)
