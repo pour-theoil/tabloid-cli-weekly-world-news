@@ -9,7 +9,10 @@ namespace TabloidCLI.Repositories
     public class PostRepository : DatabaseConnector, IRepository<Post>
     {
         public PostRepository(string connectionString) : base(connectionString) { }
-
+        /// <summary>
+        /// Get All Posts
+        /// </summary>
+        /// <returns></returns>
         public List<Post> GetAll()
         {
             using (SqlConnection conn = Connection)
@@ -26,6 +29,7 @@ namespace TabloidCLI.Repositories
                                         FROM Post p
                                         LEFT JOIN Blog b ON b.Id = p.BlogId
                                         LEFT JOIN Author a ON a.Id = p.AuthorId
+                                        WHERE IsDeleted = 0;
                                         ";
 
                     List<Post> posts = new List<Post>();
@@ -219,6 +223,7 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
+        
         /// <summary>
         /// Delete a post
         /// </summary>
@@ -229,9 +234,24 @@ namespace TabloidCLI.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "DELETE FROM Post WHERE id = @id";
+                    cmd.CommandText = "UPDATE Post SET IsDeleted = 1 WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
 
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+        public void InsertTag(Post post, Tag tag)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO PostTag (PostId, TagId)
+                                        VALUES (@postId, @tagId);";
+                    cmd.Parameters.AddWithValue("@postId", post.Id);
+                    cmd.Parameters.AddWithValue("@tagId", tag.Id);
                     cmd.ExecuteNonQuery();
                 }
             }
