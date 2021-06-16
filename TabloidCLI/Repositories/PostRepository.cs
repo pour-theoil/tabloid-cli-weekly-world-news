@@ -31,7 +31,7 @@ namespace TabloidCLI.Repositories
                                         FROM Post p
                                         LEFT JOIN Blog b ON b.Id = p.BlogId
                                         LEFT JOIN Author a ON a.Id = p.AuthorId
-                                        WHERE IsDeleted = 0;
+                                        WHERE p.IsDeleted = 0;
                                         ";
 
                     List<Post> posts = new List<Post>();
@@ -261,6 +261,18 @@ namespace TabloidCLI.Repositories
                     cmd.Parameters.AddWithValue("@postId", post.Id);
                     cmd.Parameters.AddWithValue("@tagId", tag.Id);
                     cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void GetAllTags()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"";
                 }
             }
         }
