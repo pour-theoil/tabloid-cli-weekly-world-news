@@ -266,15 +266,38 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
-        public void GetAllTags()
+        /// <summary>
+        /// Fetches all tags related to selected post Id
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        public List<Tag> GetTagsById(int postId)
         {
             using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"";
+                    cmd.CommandText = @"SELECT t.Name AS Name
+                                        FROM Post p
+                                        LEFT JOIN PostTag pt ON pt.PostId = p.Id
+                                        LEFT JOIN Tag t ON t.Id = pt.TagId
+                                        WHERE pt.PostId = @id;";
+                    cmd.Parameters.AddWithValue("@id", postId);
+                    List<Tag> tags = new List<Tag>();
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Tag tag = new Tag()
+                        {
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
+                        };
+
+                        tags.Add(tag);
+                    }
+                    reader.Close();
+                    return tags;
                 }
             }
         }
