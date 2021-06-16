@@ -263,7 +263,11 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
+        /// <summary>
+        /// Fetches all tags related to selected post Id
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
         public List<Tag> GetTagsById(int postId)
         {
             using (SqlConnection conn = Connection)
