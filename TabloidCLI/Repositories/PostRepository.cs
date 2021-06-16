@@ -19,7 +19,7 @@ namespace TabloidCLI.Repositories
                 {
                     cmd.CommandText = @"SELECT p.id AS PostId, 
                                                 p.Title AS PostTitle, 
-                                                p.Url AS URL, 
+                                                p.Url, 
                                                 p.PublishDateTime AS Date, 
                                                 a.FirstName, a.LastName, 
                                                 b.Title as BlogTitle
@@ -35,10 +35,25 @@ namespace TabloidCLI.Repositories
                     {
                         Post post = new Post()
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("PostId"))
-                            // enter remaining data here
+                            //Id = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            Title = reader.GetString(reader.GetOrdinal("PostTitle")),
+                            Url = reader.GetString(reader.GetOrdinal("Url"))
+                            //PublishDateTime = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            //Author = new Author()
+                            //{
+                            //    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            //    LastName = reader.GetString(reader.GetOrdinal("LastName"))
+                            //},
+                            //Blog = new Blog()
+                            //{
+                            //    Title = reader.GetString(reader.GetOrdinal("BlogTitle"))
+                            //}
                         };
+                        posts.Add(post);
                     }
+                    reader.Close();
+
+                    return posts;
                 }
             }
         }
