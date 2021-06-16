@@ -30,7 +30,8 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 2) List Posts");
             Console.WriteLine(" 3) Edit a Post");
             Console.WriteLine(" 4) Delete a Post");
-            Console.WriteLine(" 0) Return to Main Menu");
+            Console.WriteLine(" 5) View post details");
+            Console.WriteLine(" 0) Go Back");
 
             Console.Write("> ");
             string choice = Console.ReadLine();
@@ -49,6 +50,17 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "4":
                     Remove();
                     return this;
+                case "5":
+                    Post post = ChoosePost();
+                    if (post == null)
+                    {
+                        return this;
+                    }
+                    else
+                    {
+                        return new PostDetailManager(this, _connectionString, post.Id);
+                    }
+                    
                 case "0":
                     return _parentUI;
                 default:
@@ -57,6 +69,7 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
+      
         private void Add()
         {
             Console.WriteLine("New Post");
