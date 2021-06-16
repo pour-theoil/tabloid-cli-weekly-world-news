@@ -35,19 +35,19 @@ namespace TabloidCLI.Repositories
                     {
                         Post post = new Post()
                         {
-                            //Id = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            Id = reader.GetInt32(reader.GetOrdinal("PostId")),
                             Title = reader.GetString(reader.GetOrdinal("PostTitle")),
-                            Url = reader.GetString(reader.GetOrdinal("Url"))
-                            //PublishDateTime = reader.GetDateTime(reader.GetOrdinal("Date")),
-                            //Author = new Author()
-                            //{
-                            //    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                            //    LastName = reader.GetString(reader.GetOrdinal("LastName"))
-                            //},
-                            //Blog = new Blog()
-                            //{
-                            //    Title = reader.GetString(reader.GetOrdinal("BlogTitle"))
-                            //}
+                            Url = reader.GetString(reader.GetOrdinal("Url")),
+                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            Author = new Author()
+                            {
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName"))
+                            },
+                            Blog = new Blog()
+                            {
+                                Title = reader.GetString(reader.GetOrdinal("BlogTitle"))
+                            }
                         };
                         posts.Add(post);
                     }
@@ -120,7 +120,9 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-
+        /// <summary>
+        /// Creates new post
+        /// </summary>
         public void Insert(Post post)
         {
             using (SqlConnection conn = Connection)
@@ -135,17 +137,38 @@ namespace TabloidCLI.Repositories
                     cmd.Parameters.AddWithValue("@publishDate", post.PublishDateTime);
                     cmd.Parameters.AddWithValue("@authorId", post.Author.Id);
                     cmd.Parameters.AddWithValue("@url", post.Url);
-                    cmd.Parameters.AddWithValue("@blog", post.Blog.Id);
+                    //cmd.Parameters.AddWithValue("@blog", 1);
 
                     cmd.ExecuteNonQuery();
                 }
             }
             
         }
-
+        /// <summary>
+        /// Updates a post. Allegedly.
+        /// </summary>
         public void Update(Post post)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Post
+                                        SET Title = @title,
+	                                        Url = @url,
+	                                        AuthorId = @authorId
+                                        WHERE id = @id;";
+
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@url", post.Url);
+                    cmd.Parameters.AddWithValue("@authorId", post.Author.Id);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+                    //cmd.Parameters.AddWithValue("@blogId", post.Blog.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Delete(int id)
