@@ -71,19 +71,25 @@ namespace TabloidCLI.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT p.id AS PostId, 
-                                                p.Title AS PostTitle, 
-                                                p.Url, 
-                                                p.PublishDateTime AS Date, 
-                                                a.FirstName, a.LastName, 
-                                                b.Title as BlogTitle
-                                                
-                                        FROM Post p
-                                        LEFT JOIN Blog b ON b.Id = p.BlogId
-                                        LEFT JOIN Author a ON a.Id = p.AuthorId
-                                        
-                                        where p.id = @id
-                                        ";
+                    cmd.CommandText = @"SELECT p.id,
+                                               p.Title As PostTitle,
+                                               p.URL AS PostUrl,
+                                               p.PublishDateTime,
+                                               p.AuthorId,
+                                               p.BlogId,
+                                               a.FirstName,
+                                               a.LastName,
+                                               a.Bio,
+                                               b.Title AS BlogTitle,
+                                               b.URL AS BlogUrl,
+                                               t.Id AS TagId,
+                                               t.Name
+                                          FROM Post p 
+                                               LEFT JOIN Author a on p.AuthorId = a.Id
+                                               LEFT JOIN Blog b on p.BlogId = b.Id 
+                                               LEFT JOIN PostTag pt on p.Id = pt.PostId
+                                               LEFT JOIN Tag t on t.Id = pt.TagId
+                                         WHERE p.Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
                     Post post = null;
@@ -93,27 +99,39 @@ namespace TabloidCLI.Repositories
                         {
                             post = new Post()
                             {
-                                Id = reader.GetInt32(reader.GetOrdinal("PostId")),
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
                                 Title = reader.GetString(reader.GetOrdinal("PostTitle")),
-                                Url = reader.GetString(reader.GetOrdinal("Url")),
-                                PublishDateTime = reader.GetDateTime(reader.GetOrdinal("Date")),
+                                Url = reader.GetString(reader.GetOrdinal("PostUrl")),
+                                PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
                                 Author = new Author()
                                 {
+                                    Id = reader.GetInt32(reader.GetOrdinal("AuthorId")),
                                     FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                                    LastName = reader.GetString(reader.GetOrdinal("LastName"))
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                    Bio = reader.GetString(reader.GetOrdinal("Bio")),
                                 },
                                 Blog = new Blog()
                                 {
-                                    Title = reader.GetString(reader.GetOrdinal("BlogTitle"))
+                                    Id = reader.GetInt32(reader.GetOrdinal("BlogId")),
+                                    Title = reader.GetString(reader.GetOrdinal("BlogTitle")),
+                                    Url = reader.GetString(reader.GetOrdinal("BlogUrl")),
                                 }
                             };
+                        }
 
+                        if (!reader.IsDBNull(reader.GetOrdinal("TagId")))
+                        {
+                            post.Tags.Add(new Tag()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("TagId")),
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            });
                         }
                     }
                     reader.Close();
+
                     return post;
                 }
-
             }
         }
 
@@ -302,6 +320,8 @@ namespace TabloidCLI.Repositories
             }
         }
 
+
+
         public void DeleteTag(int postId, int tagId)
         {
             using (SqlConnection conn = Connection)
@@ -310,7 +330,7 @@ namespace TabloidCLI.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"DELETE FROM PostTAg 
-                                         WHERE PostId = @postid AND 
+                                         WHERE PostId = @postId AND 
                                                TagId = @tagId";
                     cmd.Parameters.AddWithValue("@postId", postId);
                     cmd.Parameters.AddWithValue("@tagId", tagId);
@@ -319,5 +339,7 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
+
+        
     }
 }
