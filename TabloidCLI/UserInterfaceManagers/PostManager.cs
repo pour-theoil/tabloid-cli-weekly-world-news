@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TabloidCLI.Models;
 using TabloidCLI.Repositories;
 
@@ -25,9 +24,11 @@ namespace TabloidCLI.UserInterfaceManagers
         // Set up Post Management Menu
         public IUserInterfaceManager Execute()
         {
+            //Print menu for post management
             Console.WriteLine("Post Management Menu");
             Console.WriteLine(" 1) Add a Post");
             Console.WriteLine(" 2) List Posts");
+            Console.WriteLine(" 3) Edit a Post");
 
             Console.Write("> ");
             string choice = Console.ReadLine();
@@ -39,6 +40,9 @@ namespace TabloidCLI.UserInterfaceManagers
                     return this;
                 case "2":
                     List();
+                    return this;
+                case "3":
+                    Edit();
                     return this;
                 default:
                     Console.WriteLine("Invalid Selection");
@@ -66,16 +70,22 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine("Select an Author: ");
             post.Author = ChooseAuthor();
 
-            Console.WriteLine("Select a Blog: ");
-            post.Blog = ChooseBlog();
+            //Console.WriteLine("Select a Blog: ");
+            //post.Blog = ChooseBlog();
 
             _postRepository.Insert(post);
             //Console.WriteLine("Select a Blog: ");
             //post.Blog = 
         }
-
+        //Fetches all authors and prints a list of the authors
         private Author ChooseAuthor(string prompt = null)
         {
+            if (prompt == null)
+            {
+                prompt = "Please Select an Author: ";
+            }
+
+            Console.WriteLine(prompt);
 
             List<Author> authors = _authorRepository.GetAll();
 
@@ -92,7 +102,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 int choice = int.Parse(input);
                 return authors[choice - 1];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("Invalid Selection");
                 return null;
@@ -118,21 +128,83 @@ namespace TabloidCLI.UserInterfaceManagers
                 int choice = int.Parse(input);
                 return blogs[choice - 1];
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.WriteLine("Invalid Selection");
                 return null;
             }
         }
 
+        private Post ChoosePost(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose a Post";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Post> posts = _postRepository.GetAll();
+
+            //loop over posts and print numbered list to choose from 
+            for (int i = 0; i < posts.Count; i++)
+            {
+                Post post = posts[i];
+                Console.WriteLine($"{i + 1}) {post.Title}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return posts[choice - 1];
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
+            }
+        }
+
+        // Edit a post
+        private void Edit()
+        {
+            Post postToEdit = ChoosePost("Please choose a Post to edit");
+            if (postToEdit == null)
+            {
+                return;
+            }
+
+            Console.WriteLine();
+            Console.Write("New Post Title (blank to leave unchanged): ");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                postToEdit.Title = title;
+            }
+            Console.Write("New Post URL (blank to leave unchanged): ");
+            string url = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                postToEdit.Url = url;
+            }
+            Console.WriteLine("Select New Author: ");
+            postToEdit.Author = ChooseAuthor();
+
+            _postRepository.Update(postToEdit);
+        }
+
         private void List()
         {
             List<Post> posts = _postRepository.GetAll();
-            foreach(Post post in posts)
+            foreach (Post post in posts)
             {
                 Console.Write($"{post.Title} ");
                 Console.WriteLine(post.Url);
             }
         }
+
+
     }
 }
