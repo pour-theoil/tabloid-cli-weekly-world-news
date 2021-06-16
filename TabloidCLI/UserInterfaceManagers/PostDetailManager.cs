@@ -104,10 +104,10 @@ namespace TabloidCLI.UserInterfaceManagers
 
         private void RemoveTag()
         {
-            Post post = _postRepository.Get(_postId);
+            
 
-            Console.WriteLine($"Which tag would you like to remove from {post.Title}?");
-            List<Tag> tags = post.Tags;
+            Console.WriteLine($"Which tag would you like to remove?");
+            List<Tag> tags = _postRepository.GetTagsById(_postId);
 
             for (int i = 0; i < tags.Count; i++)
             {
@@ -121,7 +121,7 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 int choice = int.Parse(input);
                 Tag tag = tags[choice - 1];
-                _postRepository.DeleteTag(post.Id, tag.Id);
+                _postRepository.DeleteTag(_postId, tag.Id);
             }
             catch (Exception ex)
             {
