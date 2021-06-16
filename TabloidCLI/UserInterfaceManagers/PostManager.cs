@@ -21,7 +21,13 @@ namespace TabloidCLI.UserInterfaceManagers
             _blogRepository = new BlogRepository(connectionString);
         }
 
-        // Set up Post Management Menu
+        /// <summary>
+        /// Set up Post Management Menu
+        /// </summary>
+        /// <returns>
+        /// Returns Menu for post management. 
+        /// Selecting an option executes its specified method.
+        /// </returns>
         public IUserInterfaceManager Execute()
         {
             //Print menu for post management
@@ -69,7 +75,9 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
-      
+      /// <summary>
+      /// Adds new post object to the Post Table
+      /// </summary>
         private void Add()
         {
             Console.WriteLine("New Post");
@@ -84,9 +92,6 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.Write("Publication Date: ");
             post.PublishDateTime = DateTime.Parse(Console.ReadLine());
 
-            Console.Write("");
-            //ListAuthors();
-
             Console.WriteLine("Select an Author: ");
             post.Author = ChooseAuthor();
 
@@ -94,10 +99,12 @@ namespace TabloidCLI.UserInterfaceManagers
             post.Blog = ChooseBlog();
 
             _postRepository.Insert(post);
-            //Console.WriteLine("Select a Blog: ");
-            //post.Blog = 
         }
-        //Fetches all authors and prints a list of the authors
+        /// <summary>
+        /// Fetches all authors and prints a list of the authors
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns></returns>
         private Author ChooseAuthor(string prompt = null)
         {
             if (prompt == null)
@@ -191,7 +198,9 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
-        // Edit a post
+        /// <summary>
+        /// Edit a post
+        /// </summary>
         private void Edit()
         {
             Post postToEdit = ChoosePost("Please choose a Post to edit");
@@ -228,7 +237,9 @@ namespace TabloidCLI.UserInterfaceManagers
 
             _postRepository.Update(postToEdit);
         }
-
+        /// <summary>
+        /// List all post names and URLs
+        /// </summary>
         private void List()
         {
             List<Post> posts = _postRepository.GetAll();
@@ -238,7 +249,9 @@ namespace TabloidCLI.UserInterfaceManagers
                 Console.WriteLine(post.Url);
             }
         }
-
+        /// <summary>
+        /// Executes Delete function in the postRepository
+        /// </summary>
         private void Remove()
         {
             Post postToDelete = ChoosePost("Which post would you like to remove?");

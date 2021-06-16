@@ -12,7 +12,9 @@ namespace TabloidCLI.Repositories
         /// <summary>
         /// Get All Posts
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// List of all Posts
+        /// </returns>
         public List<Post> GetAll()
         {
             using (SqlConnection conn = Connection)
@@ -223,9 +225,10 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
-        
+
         /// <summary>
-        /// Delete a post
+        /// Soft deletes a post by setting IsDeleted to 1
+        /// Run "AlTER TABLE Post ADD IsDeleted BIT DEFAULT 0 NOT NULL;" in SQL
         /// </summary>
         public void Delete(int id)
         {
@@ -241,6 +244,11 @@ namespace TabloidCLI.Repositories
                 }
             }
         }
+        /// <summary>
+        /// Adds new tag to Post object
+        /// </summary>
+        /// <param name="post"></param>
+        /// <param name="tag"></param>
         public void InsertTag(Post post, Tag tag)
         {
             using (SqlConnection conn = Connection)
