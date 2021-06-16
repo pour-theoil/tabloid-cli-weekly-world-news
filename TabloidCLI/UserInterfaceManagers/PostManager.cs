@@ -18,6 +18,7 @@ namespace TabloidCLI.UserInterfaceManagers
             _postRepository = new PostRepository(connectionString);
             _connectionString = connectionString;
             _authorRepository = new AuthorRepository(connectionString);
+            _blogRepository = new BlogRepository(connectionString);
         }
 
 
@@ -29,6 +30,8 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 1) Add a Post");
             Console.WriteLine(" 2) List Posts");
             Console.WriteLine(" 3) Edit a Post");
+            Console.WriteLine(" 4) Delete a Post");
+            Console.WriteLine(" 0) Return to Main Menu");
 
             Console.Write("> ");
             string choice = Console.ReadLine();
@@ -44,6 +47,11 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "3":
                     Edit();
                     return this;
+                case "4":
+                    Remove();
+                    return this;
+                case "0":
+                    return _parentUI;
                 default:
                     Console.WriteLine("Invalid Selection");
                     return this;
@@ -70,8 +78,8 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine("Select an Author: ");
             post.Author = ChooseAuthor();
 
-            //Console.WriteLine("Select a Blog: ");
-            //post.Blog = ChooseBlog();
+            Console.WriteLine("Select a Blog: ");
+            post.Blog = ChooseBlog();
 
             _postRepository.Insert(post);
             //Console.WriteLine("Select a Blog: ");
@@ -109,7 +117,11 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
-        // !! NEED BLOG REPOSITORY BEFORE I CAN PROCEED !!
+        /// <summary>
+        /// Choose Blog
+        /// </summary>
+        /// <param name="prompt"></param>
+        /// <returns></returns>
 
         private Blog ChooseBlog(string prompt = null)
         {
@@ -192,6 +204,16 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine("Select New Author: ");
             postToEdit.Author = ChooseAuthor();
 
+            Console.WriteLine("Select New Blog ");
+            postToEdit.Blog = ChooseBlog();
+
+            Console.WriteLine("Select New Date d/m/yy (blank to leave unchanged): ");
+            string date = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+                postToEdit.PublishDateTime = DateTime.Parse(date);
+            }
+
             _postRepository.Update(postToEdit);
         }
 
@@ -202,6 +224,15 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 Console.Write($"{post.Title} ");
                 Console.WriteLine(post.Url);
+            }
+        }
+
+        private void Remove()
+        {
+            Post postToDelete = ChoosePost("Which post would you like to remove?");
+            if(postToDelete != null)
+            {
+                _postRepository.Delete(postToDelete.Id);
             }
         }
 
