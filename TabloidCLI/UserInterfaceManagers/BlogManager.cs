@@ -44,9 +44,11 @@ namespace TabloidCLI.UserInterfaceManagers
                     Add();
                     return this;
                 case "4":
-                    throw new NotImplementedException();
+                    Edit();
+                    return this;
                 case "5":
-                    throw new NotImplementedException();
+                    Remove();
+                    return this;
                 case "0":
                     return _parentUI;
                 default:
@@ -55,7 +57,7 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
-        // The list function.  Lists all blogs.
+        // The list method.  Lists all blogs.
         private void List()
         {
             List<Blog> blogs = _blogRepository.GetAll();
@@ -66,7 +68,39 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
-        // The Add function.  Adds a blog to the blog table with user entered title and url.
+        //? What does this do?
+        private Blog Choose(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose a Blog:";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Blog> blogs = _blogRepository.GetAll();
+
+            for (int i = 0; i < blogs.Count; i++)
+            {
+                Blog blog = blogs[i];
+                Console.WriteLine($" {i + 1} {blog.Title}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return blogs[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
+            }
+        }
+
+        // The Add method.  Adds a blog to the blog table with user entered title and url.
         private void Add()
         {
             Console.WriteLine("New Blog");
@@ -79,6 +113,40 @@ namespace TabloidCLI.UserInterfaceManagers
             blog.Url = Console.ReadLine();
 
             _blogRepository.Insert(blog);
+        }
+
+        // The Edit method.  Adds edits a single blog on the blog table with the user defined changes.  Note that it utilizes the Choose method.
+        private void Edit()
+        {
+            Blog blogToEdit = Choose("Which blog would you like to edit?");
+            if (blogToEdit == null)
+            {
+                return;
+            }
+            Console.WriteLine();
+            Console.Write("New title (blank to leave unchanged: ");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                blogToEdit.Title = title;
+            }
+            Console.Write("New URL (blank to leave unchaged: ");
+            string url = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                blogToEdit.Url = url;
+            }
+            _blogRepository.Update(blogToEdit);
+        }
+
+        // The Remove method.  Note that it utilizes the Choose method.
+        private void Remove()
+        {
+            Blog blogToDelete = Choose("Which blog would you like to remove?");
+            if (blogToDelete != null)
+            {
+                _blogRepository.Delete(blogToDelete.Id);
+            }
         }
     }
 }
