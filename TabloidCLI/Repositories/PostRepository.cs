@@ -35,19 +35,19 @@ namespace TabloidCLI.Repositories
                     {
                         Post post = new Post()
                         {
-                            //Id = reader.GetInt32(reader.GetOrdinal("PostId")),
+                            Id = reader.GetInt32(reader.GetOrdinal("PostId")),
                             Title = reader.GetString(reader.GetOrdinal("PostTitle")),
-                            Url = reader.GetString(reader.GetOrdinal("Url"))
-                            //PublishDateTime = reader.GetDateTime(reader.GetOrdinal("Date")),
-                            //Author = new Author()
-                            //{
-                            //    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                            //    LastName = reader.GetString(reader.GetOrdinal("LastName"))
-                            //},
-                            //Blog = new Blog()
-                            //{
-                            //    Title = reader.GetString(reader.GetOrdinal("BlogTitle"))
-                            //}
+                            Url = reader.GetString(reader.GetOrdinal("Url")),
+                            PublishDateTime = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            Author = new Author()
+                            {
+                                FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                LastName = reader.GetString(reader.GetOrdinal("LastName"))
+                            },
+                            Blog = new Blog()
+                            {
+                                Title = reader.GetString(reader.GetOrdinal("BlogTitle"))
+                            }
                         };
                         posts.Add(post);
                     }
@@ -145,7 +145,7 @@ namespace TabloidCLI.Repositories
             
         }
         /// <summary>
-        /// Updates a post
+        /// Updates a post. Allegedly.
         /// </summary>
         public void Update(Post post)
         {
@@ -158,7 +158,7 @@ namespace TabloidCLI.Repositories
                                         SET Title = @title,
 	                                        Url = @url,
 	                                        AuthorId = @authorId
-                                        WHERE id = @id";
+                                        WHERE id = @id;";
 
                     cmd.Parameters.AddWithValue("@title", post.Title);
                     cmd.Parameters.AddWithValue("@url", post.Url);
