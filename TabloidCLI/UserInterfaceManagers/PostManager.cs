@@ -21,7 +21,6 @@ namespace TabloidCLI.UserInterfaceManagers
             _blogRepository = new BlogRepository(connectionString);
         }
 
-
         // Set up Post Management Menu
         public IUserInterfaceManager Execute()
         {
