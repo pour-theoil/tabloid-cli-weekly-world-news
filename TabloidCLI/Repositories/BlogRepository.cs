@@ -44,7 +44,6 @@ namespace TabloidCLI.Repositories
             }
         }
 
-
         // Get a single blog.
         public Blog Get(int id)
         {
@@ -53,9 +52,15 @@ namespace TabloidCLI.Repositories
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT Id, Title, URL
-                                        FROM Blog
-                                        WHERE Id = @id";
+                    cmd.CommandText = @"SELECT  b.Id,
+		                                        b.Title,
+		                                        b.Url,
+		                                        bt.TagId AS TagId,
+		                                        t.Name AS Name
+                                                FROM Blog b       
+                                                LEFT JOIN BlogTag bt ON b.Id = bt.BlogId
+                                                LEFT JOIN Tag t ON bt.TagId = t.Id
+                                                WHERE b.Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
 
                     Blog blog = null;
@@ -69,12 +74,11 @@ namespace TabloidCLI.Repositories
                             {
                                 Id = reader.GetInt32(reader.GetOrdinal("Id")),
                                 Title = reader.GetString(reader.GetOrdinal("Title")),
-                                Url = reader.GetString(reader.GetOrdinal("URL"))
+                                Url = reader.GetString(reader.GetOrdinal("Url"))
                             };
                         }
 
-                        //TODO Tags Functionality.
-                        /* 
+                        //TODO Tags Functionality? 
                         if (!reader.IsDBNull(reader.GetOrdinal("TagId")))
                         {
                             blog.Tags.Add(new Tag()
@@ -83,7 +87,6 @@ namespace TabloidCLI.Repositories
                                 Name = reader.GetString(reader.GetOrdinal("Name")),
                             });
                         }
-                        */
                     }
 
                     reader.Close();
@@ -115,7 +118,6 @@ namespace TabloidCLI.Repositories
             }
         }
 
-
         // Update a blog.
         public void Update(Blog entry)
         {
@@ -138,7 +140,6 @@ namespace TabloidCLI.Repositories
             }
         }
 
-
         // Delete a blog.
         public void Delete(int id)
         {
@@ -151,6 +152,40 @@ namespace TabloidCLI.Repositories
                                         FROM Blog
                                         WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void InsertTag(Blog blog, Tag tag)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO BlogTag (BlogId, TagId)
+                                        VALUES (@blogId, @tagId)";
+                    cmd.Parameters.AddWithValue("@blogId", blog.Id);
+                    cmd.Parameters.AddWithValue("@tagId", tag.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void DeleteTag(int blogId, int tagId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM BlogTag 
+                                        WHERE BlogId = @blogId
+                                        AND TagId = @tagId";
+                    cmd.Parameters.AddWithValue("@blogId", blogId);
+                    cmd.Parameters.AddWithValue("@tagId", tagId);
 
                     cmd.ExecuteNonQuery();
                 }
