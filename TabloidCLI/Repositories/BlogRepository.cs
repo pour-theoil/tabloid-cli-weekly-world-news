@@ -78,8 +78,6 @@ namespace TabloidCLI.Repositories
                                 Url = reader.GetString(reader.GetOrdinal("Url"))
                             };
                         }
-
-                        //TODO Tags Functionality? 
                         if (!reader.IsDBNull(reader.GetOrdinal("TagId")))
                         {
                             blog.Tags.Add(new Tag()

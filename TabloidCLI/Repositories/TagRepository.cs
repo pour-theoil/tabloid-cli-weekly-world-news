@@ -50,7 +50,7 @@ namespace TabloidCLI
         /// <param name="tag"></param>
         public void Insert(Tag tag)
         {
-            using(SqlConnection conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
@@ -68,10 +68,10 @@ namespace TabloidCLI
         /// <param name="tag"></param>
         public void Update(Tag tag)
         {
-            using(SqlConnection conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using(SqlCommand cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = "Update tag set Name = @name where id = @id";
                     cmd.Parameters.AddWithValue("@name", tag.Name);
@@ -138,10 +138,10 @@ namespace TabloidCLI
 
         public SearchResults<Post> SearchPosts(string tagname)
         {
-            using(SqlConnection conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using(SqlCommand cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT p.id,
                                                p.Title As PostTitle,
@@ -189,6 +189,39 @@ namespace TabloidCLI
                         posts.Add(post);
                     }
                     return posts;
+                }
+
+            }
+        }
+        public SearchResults<Blog> SearchBlogs(string tagName)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT  b.Id,
+                                                b.Title,
+		                                        b.URL
+                                        FROM Blog b       
+                                        LEFT JOIN BlogTag bt ON b.Id = bt.BlogId
+                                        LEFT JOIN Tag t ON t.Id = bt.TagId
+                                        WHERE t.Name like @name AND b.IsDeleted = 0";
+                    cmd.Parameters.AddWithValue("@name", tagName);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    SearchResults<Blog> blogs = new SearchResults<Blog>();
+                    while (reader.Read())
+                    {
+                        Blog blog = new Blog()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Title = reader.GetString(reader.GetOrdinal("Title")),
+                            Url = reader.GetString(reader.GetOrdinal("Url"))
+                        };
+                        blogs.Add(blog);
+                    }
+                    return blogs;
                 }
 
             }
