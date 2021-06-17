@@ -1,4 +1,6 @@
 ﻿using System;
+using TabloidCLI.Repositories;
+using TabloidCLI.Models;
 
 namespace TabloidCLI.UserInterfaceManagers
 {
@@ -9,6 +11,16 @@ namespace TabloidCLI.UserInterfaceManagers
 
         public IUserInterfaceManager Execute()
         {
+
+            SetConsoleColor();
+            int runs = 0;
+            while (runs == 0)
+            {
+                Console.WriteLine("Welcome to the blog!");
+                runs++;
+            }
+
+
             Console.WriteLine("Main Menu");
 
             Console.WriteLine(" 1) Journal Management");
@@ -30,7 +42,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "4": return new PostManager(this, CONNECTION_STRING);
                 case "5": return new TagManager(this, CONNECTION_STRING);
                 case "6": return new SearchManager(this, CONNECTION_STRING);
-                case "7": return new BackgroundcolorManager(this);
+                case "7": return new BackgroundcolorManager(this, CONNECTION_STRING);
                 case "0":
                     Console.WriteLine("Good bye");
                     return null;
@@ -38,6 +50,19 @@ namespace TabloidCLI.UserInterfaceManagers
                     Console.WriteLine("Invalid Selection");
                     return this;
             }
+        }
+
+        private void SetConsoleColor()
+        {
+            //instance of the colorrepository
+            colorRepository colorrepository = new colorRepository(CONNECTION_STRING);
+            //get all of the console colors
+            ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
+
+            //retrieve stored color
+            Color color = colorrepository.GetColor();
+            Console.BackgroundColor = colors[color.colorid];
+            Console.Clear();
         }
     }
 }

@@ -7,9 +7,16 @@ namespace TabloidCLI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to the blog!");
+            Console.Clear();
+            //Instance of Background color repository
+
+            
+
+            
             // MainMenuManager implements the IUserInterfaceManager interface
             IUserInterfaceManager ui = new MainMenuManager();
+
+            
             while (ui != null)
             {
                 // Each call to Execute will return the next IUserInterfaceManager we should execute
