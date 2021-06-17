@@ -56,7 +56,9 @@ namespace TabloidCLI.UserInterfaceManagers
             List<Journal> entries = _journalRepository.GetAll();
             ConsoleKeyInfo cki;
             int i = 0;
-            Console.WriteLine(entries[i].Title);
+            Console.WriteLine($"Title: {entries[i].Title}");
+            Console.WriteLine($"Date: {entries[i].CreateDateTime}");
+            Console.WriteLine($"Content: {entries[i].Content}");
             do
             {
 
@@ -69,7 +71,9 @@ namespace TabloidCLI.UserInterfaceManagers
                         i = -1;
                     }
                     i++;
-                    Console.WriteLine(entries[i].Title);
+                    Console.WriteLine($"Title: {entries[i].Title}");
+                    Console.WriteLine($"Date: {entries[i].CreateDateTime}");
+                    Console.WriteLine($"Content: {entries[i].Content}");
                 }
                 if (cki.Key == ConsoleKey.UpArrow)
                 {
@@ -78,7 +82,9 @@ namespace TabloidCLI.UserInterfaceManagers
                         i = entries.Count;
                     }
                     i--;
-                    Console.WriteLine(entries[i].Title);
+                    Console.WriteLine($"Title: {entries[i].Title}");
+                    Console.WriteLine($"Date: {entries[i].CreateDateTime}");
+                    Console.WriteLine($"Content: {entries[i].Content}");
                 }
 
 
