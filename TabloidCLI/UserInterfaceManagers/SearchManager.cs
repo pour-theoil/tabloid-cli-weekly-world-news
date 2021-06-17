@@ -37,6 +37,7 @@ namespace TabloidCLI.UserInterfaceManagers
                     SearchPosts();
                     return this;
                 case "4":
+                    SearchAll();
                     return this;
                 case "0":
                     return _parentUI;
@@ -58,6 +59,7 @@ namespace TabloidCLI.UserInterfaceManagers
             }
             else
             {
+                Console.WriteLine("Blog Results:");
                 results.Display();
             }
         }
@@ -75,6 +77,7 @@ namespace TabloidCLI.UserInterfaceManagers
             }
             else
             {
+                Console.WriteLine("Author Results: ");
                 results.Display();
             }
         }
@@ -92,7 +95,49 @@ namespace TabloidCLI.UserInterfaceManagers
             }
             else
             {
+                Console.WriteLine("Posts Results:");
                 results.Display();
+            }
+        }
+
+        private void SearchAll()
+        {
+            Console.Write("Tag> ");
+            string tagName = Console.ReadLine();
+
+            SearchResults<Post> postResults = _tagRepository.SearchPosts(tagName);
+            SearchResults<Blog> blogResults = _tagRepository.SearchBlogs(tagName);
+            SearchResults<Author> authorResults = _tagRepository.SearchAuthors(tagName);
+
+            if (postResults.NoResultsFound)
+            {
+                Console.WriteLine($"No results for {tagName} in Posts");
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("Posts Results:");
+                postResults.Display();
+            }
+            if (blogResults.NoResultsFound)
+            {
+                Console.WriteLine($"No results for {tagName} in Blogs");
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("Blog Results:");
+                blogResults.Display();
+            }
+            if (authorResults.NoResultsFound)
+            {
+                Console.WriteLine($"No results for {tagName} in Authors");
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("Author Results:");
+                authorResults.Display();
             }
         }
     }
