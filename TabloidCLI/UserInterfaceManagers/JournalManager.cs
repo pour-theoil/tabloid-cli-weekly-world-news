@@ -37,14 +37,6 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "2":
                     Journal journal = Choose();
                     return this;
-                    //if (journal == null)
-                    //{
-                    //    return this;
-                    //}
-                //else
-                //{
-                //    return new JournalDetailManager(this, _connectionString, journal.Id);
-                //}
                 case "3":
                     Add();
                     return this;
@@ -54,6 +46,7 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "5":
                     Remove();
                     return this;
+
                 case "0":
                     return _parentUI;
                 default:
