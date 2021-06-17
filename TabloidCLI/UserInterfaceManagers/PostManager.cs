@@ -32,8 +32,8 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             //Print menu for post management
             Console.WriteLine("Post Management Menu");
-            Console.WriteLine(" 1) Add a Post");
-            Console.WriteLine(" 2) List Posts");
+            Console.WriteLine(" 1) List Posts");
+            Console.WriteLine(" 2) Add a Post");
             Console.WriteLine(" 3) Edit a Post");
             Console.WriteLine(" 4) Delete a Post");
             Console.WriteLine(" 5) View post details");
@@ -45,10 +45,10 @@ namespace TabloidCLI.UserInterfaceManagers
             switch (choice)
             {
                 case "1":
-                    Add();
+                    List();
                     return this;
                 case "2":
-                    List();
+                    Add();
                     return this;
                 case "3":
                     Edit();
