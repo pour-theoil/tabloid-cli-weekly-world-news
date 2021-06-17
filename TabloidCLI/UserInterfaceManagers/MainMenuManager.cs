@@ -20,7 +20,6 @@ namespace TabloidCLI.UserInterfaceManagers
                 runs++;
             }
 
-
             Console.WriteLine("Main Menu");
 
             Console.WriteLine(" 1) Journal Management");

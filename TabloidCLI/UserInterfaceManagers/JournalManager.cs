@@ -54,10 +54,35 @@ namespace TabloidCLI.UserInterfaceManagers
         private void List()
         {
             List<Journal> entries = _journalRepository.GetAll();
-            foreach (Journal j in entries)
+            ConsoleKeyInfo cki;
+            int i = 0;
+            Console.WriteLine(entries[i].Title);
+            do
             {
-                Console.WriteLine(j.Title);
-            }
+
+                cki = Console.ReadKey();
+
+                if (cki.Key == ConsoleKey.DownArrow)
+                {
+                    if (i >= entries.Count-1)
+                    {
+                        i = -1;
+                    }
+                    i++;
+                    Console.WriteLine(entries[i].Title);
+                }
+                if (cki.Key == ConsoleKey.UpArrow)
+                {
+                    if (i == 0)
+                    {
+                        i = entries.Count;
+                    }
+                    i--;
+                    Console.WriteLine(entries[i].Title);
+                }
+
+
+            } while (cki.Key != ConsoleKey.Enter);
         }
         private Journal Choose(string prompt = null)
         {
@@ -137,11 +162,11 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 entryToEdit.Content = content;
             }
-            
-                entryToEdit.CreateDateTime = DateTime.Now;
-            
-            
-            
+
+            entryToEdit.CreateDateTime = DateTime.Now;
+
+
+
 
             _journalRepository.Update(entryToEdit);
         }
