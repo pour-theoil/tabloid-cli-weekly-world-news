@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TabloidCLI.Repositories;
 
 namespace TabloidCLI.UserInterfaceManagers
 {
     class BackgroundcolorManager : IUserInterfaceManager
     {
         private IUserInterfaceManager _parentUI;
+        private colorRepository _colorRepository;
+        private string _connectionString;
 
-
-        public BackgroundcolorManager(IUserInterfaceManager parentUI)
+        public BackgroundcolorManager(IUserInterfaceManager parentUI, string connectionString)
         {
+            _colorRepository = new colorRepository(connectionString);
             _parentUI = parentUI;
+            _connectionString = connectionString;
         }
 
         public IUserInterfaceManager Execute()
@@ -30,6 +34,7 @@ namespace TabloidCLI.UserInterfaceManagers
                     return this;
                 case "2":
                     Console.BackgroundColor = ConsoleColor.Black;
+                    _colorRepository.SetColor(0);
                     Console.Clear();
                     return this;
                 case "3":
@@ -50,6 +55,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
 
+            
             for(int i = 0; i < 6; i++)
             {
                 Console.ForegroundColor = colors[i];
@@ -61,7 +67,7 @@ namespace TabloidCLI.UserInterfaceManagers
             try
             {
                 int choice = int.Parse(input);
-                
+                _colorRepository.SetColor(choice);
                 Console.BackgroundColor = colors[choice];
                 Console.Clear();
             }
@@ -70,6 +76,8 @@ namespace TabloidCLI.UserInterfaceManagers
                 Console.WriteLine("Invalid Selection");
             }
         }
+
+
     }
 }
        

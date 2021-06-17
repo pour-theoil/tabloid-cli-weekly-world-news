@@ -29,7 +29,7 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 1) List Notes");
             Console.WriteLine(" 2) Add Note");
             Console.WriteLine(" 3) Remove Note");
-            Console.WriteLine(" 0) Go Back");
+            Console.WriteLine(" 0) Return");
 
             Console.Write("> ");
             string choice = Console.ReadLine();
