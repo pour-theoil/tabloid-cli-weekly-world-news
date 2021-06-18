@@ -1,31 +1,11 @@
 # Tabloid CLI
 
-## The Story
+## Purpose
 
-"Hey, let's start a company," you say.
+This group project was our first major example of an implemntation of C# and MS SQL. Are task was to take an existing console app with limited functionallity and build out the remaining repository and manager classes to reach full functionality. As a team we delegated specify stories in the initial phase of the sprint coming together to review code and solve any issues that would arise. After completeing our intial commitment we took a mob coding approach to solve some additional challenge problems. Including persisting a background color change as well as allowing the user to scroll through the different journal entries.
 
-"Ok. Let's do it. What should our company do?"
+## How to run
 
-"Well..." you begin, "what do people need? What will they find valuable?"
-
-"I know I always need help keeping things organized."
-
-"Yeah," you say, pondering the idea. "Organization. That's good. What should we organize? ...I know: Blog Posts!"
-
-"Great idea!"
-
-"We'll make millions!"
-
----
-
-## The Tabloid Proof of Concept
-
-Our new business will create a software product to allow people save info about favorite blog posts, authors and blogs.
-
-In order to test the new business idea, we'll create a [Proof of Concept (POC)](https://en.wikipedia.org/wiki/Proof_of_concept#Software_development). This POC will be a simplified implementation of the idea that will be used to test the business idea to ensure that customers would find it valuable, and also to allow the team to get a handle on the concept. After we complete the POC we will use it to evaluate our business idea and determine if we need to pivot (change direction) toward another idea.
-
-For our POC, we will build a command line app in C# and save our data in SQL Server.
-
-The ERD for the POC is provided below
+Clone the repo in a directory of your choosing. Using a local sql express database start a new query and execute the ``TabloidCLI.sql`` code. The application can be run in the console from the Tabliod CLI directory with a ``dotnet run`` or using the built in console in Visual Studio 2019
 
 https://dbdiagram.io/d/5fce53559a6c525a03ba2069
